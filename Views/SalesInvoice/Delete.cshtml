@@ -1,0 +1,13 @@
+﻿@model Accounting_Managment_System_Frontend.Models.SalesInvoiceViewModel
+
+<h2>Delete Sales Invoice</h2>
+
+<div class="alert alert-warning">
+    Are you sure you want to delete invoice #<strong>@Model.Id</strong> for customer <strong>@Model.CustomerId</strong>?
+</div>
+
+<form asp-action="Delete" method="post">
+    @Html.HiddenFor(m => m.Id)
+    <button type="submit" class="btn btn-danger">Yes, Delete</button>
+    <a class="btn btn-secondary" asp-action="Index">Cancel</a>
+</form>

@@ -1,0 +1,36 @@
+﻿@model IEnumerable<Accounting_Managment_System_Frontend.Models.BankAccountViewModel>
+
+<h2>Bank Accounts</h2>
+
+<p>
+    <a class="btn btn-primary" href="/BankAccounts/Create">Create Bank Account</a>
+</p>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Bank Name</th>
+            <th>Account Number</th>
+            <th>Currency</th>
+            <th>Opening Balance</th>
+            <th>Active</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.BankName</td>
+                <td>@item.AccountNumber</td>
+                <td>@item.CurrencyId</td>
+                <td>@item.OpeningBalance</td>
+                <td>@item.IsActive</td>
+                <td>
+                    <a class="btn btn-sm btn-info" href="/BankAccounts/Edit/@item.BankAccountId">Edit</a>
+                    <a class="btn btn-sm btn-danger" href="/BankAccounts/Delete/@item.BankAccountId">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

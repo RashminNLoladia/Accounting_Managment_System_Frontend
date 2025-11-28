@@ -1,0 +1,38 @@
+﻿@model IEnumerable<Accounting_Managment_System_Frontend.Models.CurrencyViewModel>
+
+@{
+    ViewData["Title"] = "Currencies";
+}
+
+<h2>Currencies</h2>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">Create New Currency</a>
+</p>
+
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>Code</th>
+            <th>Name</th>
+            <th>Symbol</th>
+            <th>Decimal Places</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Code</td>
+                <td>@item.Name</td>
+                <td>@item.Symbol</td>
+                <td>@item.DecimalPlaces</td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.CurrencyId" class="btn btn-sm btn-warning">Edit</a>
+                    <a asp-action="Delete" asp-route-id="@item.CurrencyId" class="btn btn-sm btn-danger">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

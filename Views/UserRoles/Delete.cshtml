@@ -1,0 +1,23 @@
+﻿@model Accounting_Managment_System_Frontend.Models.UserRoleViewModel
+
+@{
+    ViewData["Title"] = "Delete User Role";
+}
+
+<h2>Delete User Role</h2>
+
+<h4>Are you sure you want to remove this role assignment?</h4>
+
+<dl class="row">
+    <dt class="col-sm-2">User</dt>
+    <dd class="col-sm-10">@Model.UserName</dd>
+
+    <dt class="col-sm-2">Role</dt>
+    <dd class="col-sm-10">@Model.RoleName</dd>
+</dl>
+
+<form asp-action="Delete">
+    <input type="hidden" asp-for="UserRoleId" />
+    <button type="submit" class="btn btn-danger">Delete</button>
+    <a asp-action="Index" class="btn btn-secondary ms-2">Cancel</a>
+</form>

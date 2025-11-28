@@ -1,0 +1,66 @@
+﻿@model Accounting_Managment_System_Frontend.Models.CustomerViewModel
+@{
+    ViewData["Title"] = "Create Customer";
+    var companies = ViewBag.Companies as IEnumerable<Accounting_Managment_System_Frontend.Models.CompanyViewModel> ?? new List<Accounting_Managment_System_Frontend.Models.CompanyViewModel>();
+}
+
+<h2>Create Customer</h2>
+
+<form asp-action="Create" method="post">
+    <div class="form-group">
+        <label asp-for="CompanyId"></label>
+        <select asp-for="CompanyId" class="form-control" asp-items="@(new Microsoft.AspNetCore.Mvc.Rendering.SelectList(companies, "CompanyId", "Name"))">
+            <option value="">-- Select Company --</option>
+        </select>
+        <span asp-validation-for="CompanyId" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Name"></label>
+        <input asp-for="Name" class="form-control" />
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="ContactName"></label>
+        <input asp-for="ContactName" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Email"></label>
+        <input asp-for="Email" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Phone"></label>
+        <input asp-for="Phone" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label asp-for="BillingAddress"></label>
+        <textarea asp-for="BillingAddress" class="form-control"></textarea>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="ShippingAddress"></label>
+        <textarea asp-for="ShippingAddress" class="form-control"></textarea>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="CustomerCode"></label>
+        <input asp-for="CustomerCode" class="form-control" />
+    </div>
+
+    <div class="form-check">
+        <input asp-for="IsActive" class="form-check-input" />
+        <label asp-for="IsActive" class="form-check-label"></label>
+    </div>
+
+    <br />
+    <button type="submit" class="btn btn-success">Save</button>
+    <a class="btn btn-secondary" asp-action="Index">Cancel</a>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

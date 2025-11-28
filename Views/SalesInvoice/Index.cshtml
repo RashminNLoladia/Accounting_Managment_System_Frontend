@@ -1,0 +1,34 @@
+﻿@model List<Accounting_Managment_System_Frontend.Models.SalesInvoiceViewModel>
+
+<h2>Sales Invoices</h2>
+
+<p>
+    <a class="btn btn-primary" href="/SalesInvoice/Create">Add Invoice</a>
+</p>
+
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>Customer</th>
+            <th>Date</th>
+            <th>Total Amount</th>
+            <th>Paid</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var inv in Model)
+        {
+            <tr>
+                <td>@inv.CustomerId</td> <!-- replace with name if API includes CustomerName -->
+                <td>@inv.InvoiceDate.ToString("yyyy-MM-dd")</td>
+                <td>@inv.TotalAmount</td>
+                <td>@(inv.IsPaid ? "Yes" : "No")</td>
+                <td>
+                    <a class="btn btn-sm btn-warning" href="/SalesInvoice/Edit/@inv.Id">Edit</a>
+                    <a class="btn btn-sm btn-danger" href="/SalesInvoice/Delete/@inv.Id">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -1,0 +1,44 @@
+﻿@model IEnumerable<Accounting_Managment_System_Frontend.Models.ChartOfAccountViewModel>
+
+@{
+    ViewData["Title"] = "Chart of Accounts";
+}
+
+<h2>Chart of Accounts</h2>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">Add New Account</a>
+</p>
+
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>Account Number</th>
+            <th>Account Name</th>
+            <th>Company</th>
+            <th>Account Type</th>
+            <th>Parent Account</th>
+            <th>Is Active</th>
+            <th>Created At</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var account in Model)
+        {
+            <tr>
+                <td>@account.AccountNumber</td>
+                <td>@account.Name</td>
+                <td>@account.CompanyName</td>
+                <td>@account.AccountTypeName</td>
+                <td>@account.ParentAccountName</td>
+                <td>@(account.IsActive ? "Yes" : "No")</td>
+                <td>@account.CreatedAt?.ToString("yyyy-MM-dd")</td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@account.AccountId" class="btn btn-sm btn-warning">Edit</a>
+                    <a asp-action="Delete" asp-route-id="@account.AccountId" class="btn btn-sm btn-danger">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

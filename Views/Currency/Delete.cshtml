@@ -1,0 +1,17 @@
+﻿@model Accounting_Managment_System_Frontend.Models.CurrencyViewModel
+
+@{
+    ViewData["Title"] = "Delete Currency";
+}
+
+<h2>Delete Currency</h2>
+
+<div class="alert alert-warning">
+    Are you sure you want to delete the currency: <strong>@Model.Code</strong>?
+</div>
+
+<form asp-action="Delete" method="post">
+    <input type="hidden" asp-for="CurrencyId" />
+    <button type="submit" class="btn btn-danger">Delete</button>
+    <a asp-action="Index" class="btn btn-secondary ms-2">Cancel</a>
+</form>

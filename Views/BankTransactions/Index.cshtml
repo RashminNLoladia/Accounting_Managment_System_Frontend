@@ -1,0 +1,54 @@
+﻿@model IEnumerable<Accounting_Managment_System_Frontend.Models.BankTransactionViewModel>
+
+@{
+    ViewData["Title"] = "Bank Transactions";
+}
+
+<h2>Bank Transactions</h2>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">+ Add New Transaction</a>
+</p>
+
+<table class="table table-bordered table-striped">
+    <thead class="table-dark">
+        <tr>
+            <th>Transaction ID</th>
+            <th>Bank Account</th>
+            <th>Date</th>
+            <th>Type</th>
+            <th>Amount</th>
+            <th>Reference</th>
+            <th style="width:140px;">Actions</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @if (Model != null && Model.Any())
+        {
+            foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.BankTransactionId</td>
+                    <td>@item.BankAccountId</td> <!-- Replace with name if available -->
+                    <td>@item.TransactionDate.ToShortDateString()</td>
+                    <td>@item.TransactionType</td>
+                    <td>@item.Amount</td>
+                    <td>@item.Reference</td>
+
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@item.BankTransactionId" class="btn btn-sm btn-warning">Edit</a>
+                        <a asp-action="Delete" asp-route-id="@item.BankTransactionId" class="btn btn-sm btn-danger">Delete</a>
+                    </td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="7" class="text-center">No bank transactions found.</td>
+            </tr>
+        }
+    </tbody>
+
+</table>

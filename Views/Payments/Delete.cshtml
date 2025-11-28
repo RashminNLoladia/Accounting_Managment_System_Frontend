@@ -1,0 +1,13 @@
+﻿@model Accounting_Managment_System_Frontend.Models.PaymentViewModel
+
+<h2>Delete Payment</h2>
+
+<div class="alert alert-warning">
+    Are you sure you want to delete <strong>@Model.PaymentNumber</strong>?
+</div>
+
+<form asp-action="Delete" method="post">
+    @Html.HiddenFor(m => m.PaymentId)
+    <button type="submit" class="btn btn-danger">Yes, Delete</button>
+    <a class="btn btn-secondary" asp-action="Index">Cancel</a>
+</form>

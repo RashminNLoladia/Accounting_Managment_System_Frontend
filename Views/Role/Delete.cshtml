@@ -1,0 +1,17 @@
+﻿@model Accounting_Managment_System_Frontend.Models.RoleViewModel
+
+@{
+    ViewData["Title"] = "Delete Role";
+}
+
+<h2>Delete Role</h2>
+
+<div class="alert alert-warning">
+    Are you sure you want to delete the role: <strong>@Model.Name</strong>?
+</div>
+
+<form asp-action="Delete" method="post">
+    <input type="hidden" asp-for="RoleId" />
+    <button type="submit" class="btn btn-danger">Delete</button>
+    <a asp-action="Index" class="btn btn-secondary ms-2">Cancel</a>
+</form>

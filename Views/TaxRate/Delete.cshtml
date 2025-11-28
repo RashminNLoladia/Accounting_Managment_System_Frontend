@@ -1,0 +1,12 @@
+﻿@model Accounting_Managment_System_Frontend.Models.TaxRateViewModel
+
+<h2>Delete Tax Rate</h2>
+
+<p>Are you sure you want to delete <strong>@Model.Name</strong>?</p>
+
+<form asp-action="Delete">
+    <input type="hidden" asp-for="TaxRateId" />
+
+    <button class="btn btn-danger">Delete</button>
+    <a asp-action="Index" class="btn btn-secondary ms-2">Cancel</a>
+</form>

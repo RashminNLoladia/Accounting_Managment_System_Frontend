@@ -1,0 +1,28 @@
+﻿@model Accounting_Managment_System_Frontend.Models.AccountTypeViewModel
+
+@{
+    ViewData["Title"] = "Edit Account Type";
+}
+
+<h2>Edit Account Type</h2>
+
+<form asp-action="Edit" method="post">
+    <input type="hidden" asp-for="AccountTypeId" />
+
+    <div class="form-group mb-3">
+        <label asp-for="Name" class="control-label"></label>
+        <input asp-for="Name" class="form-control" />
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+
+  
+
+    <button type="submit" class="btn btn-primary">Update</button>
+    <a asp-action="Index" class="btn btn-secondary ms-2">Cancel</a>
+</form>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

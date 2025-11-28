@@ -1,0 +1,70 @@
+﻿@model Accounting_Managment_System_Frontend.Models.BankAccountViewModel
+
+@{
+    ViewData["Title"] = "Edit Bank Account";
+}
+
+<h2 class="mb-3">Edit Bank Account</h2>
+
+<form asp-action="Edit" method="post">
+    <input type="hidden" asp-for="BankAccountId" />
+
+    <!-- Company -->
+    <div class="form-group mb-3">
+        <label asp-for="CompanyId" class="control-label"></label>
+        <select asp-for="CompanyId" class="form-select" asp-items="ViewBag.CompanyList"></select>
+        <span asp-validation-for="CompanyId" class="text-danger"></span>
+    </div>
+
+    <!-- Bank Name -->
+    <div class="form-group mb-3">
+        <label asp-for="BankName" class="control-label"></label>
+        <input asp-for="BankName" class="form-control" />
+        <span asp-validation-for="BankName" class="text-danger"></span>
+    </div>
+
+    <!-- Account Number -->
+    <div class="form-group mb-3">
+        <label asp-for="AccountNumber" class="control-label"></label>
+        <input asp-for="AccountNumber" class="form-control" />
+        <span asp-validation-for="AccountNumber" class="text-danger"></span>
+    </div>
+
+    <!-- IFSC -->
+    <div class="form-group mb-3">
+        <label asp-for="IFSC" class="control-label"></label>
+        <input asp-for="IFSC" class="form-control" />
+        <span asp-validation-for="IFSC" class="text-danger"></span>
+    </div>
+
+    <!-- Currency -->
+    <div class="form-group mb-3">
+        <label asp-for="CurrencyId" class="control-label"></label>
+        <select asp-for="CurrencyId" class="form-select" asp-items="ViewBag.CurrencyList"></select>
+        <span asp-validation-for="CurrencyId" class="text-danger"></span>
+    </div>
+
+    <!-- Opening Balance -->
+    <div class="form-group mb-3">
+        <label asp-for="OpeningBalance" class="control-label"></label>
+        <input asp-for="OpeningBalance" class="form-control" />
+        <span asp-validation-for="OpeningBalance" class="text-danger"></span>
+    </div>
+
+    <!-- IsActive -->
+    <div class="form-group mb-3 form-check">
+        <input asp-for="IsActive" class="form-check-input" />
+        <label asp-for="IsActive" class="form-check-label"></label>
+    </div>
+
+    <div class="form-group mt-4">
+        <button type="submit" class="btn btn-primary">Update</button>
+        <a asp-action="Index" class="btn btn-secondary ms-2">Cancel</a>
+    </div>
+</form>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

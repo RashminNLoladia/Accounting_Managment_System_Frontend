@@ -1,0 +1,68 @@
+﻿@model Accounting_Managment_System_Frontend.Models.ProductViewModel
+@{
+    ViewData["Title"] = "Edit Product";
+    var companies = ViewBag.Companies as IEnumerable<Accounting_Managment_System_Frontend.Models.CompanyViewModel> ?? new List<Accounting_Managment_System_Frontend.Models.CompanyViewModel>();
+    var accounts = ViewBag.Accounts as IEnumerable<Accounting_Managment_System_Frontend.Models.ChartOfAccountViewModel> ?? new List<Accounting_Managment_System_Frontend.Models.ChartOfAccountViewModel>();
+}
+
+<h2>Edit Product</h2>
+
+<form asp-action="Edit" method="post">
+    @Html.HiddenFor(m => m.ProductId)
+
+    <div class="form-group">
+        <label asp-for="CompanyId"></label>
+        <select asp-for="CompanyId" class="form-control" asp-items="@(new Microsoft.AspNetCore.Mvc.Rendering.SelectList(companies, "CompanyId", "Name"))">
+            <option value="">-- Select Company --</option>
+        </select>
+        <span asp-validation-for="CompanyId" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="SKU"></label>
+        <input asp-for="SKU" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Name"></label>
+        <input asp-for="Name" class="form-control" />
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Description"></label>
+        <textarea asp-for="Description" class="form-control"></textarea>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="SalesAccountId"></label>
+        <select asp-for="SalesAccountId" class="form-control" asp-items="@(new Microsoft.AspNetCore.Mvc.Rendering.SelectList(accounts, "AccountId", "Name"))">
+            <option value="">-- Select Sales Account --</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="PurchaseAccountId"></label>
+        <select asp-for="PurchaseAccountId" class="form-control" asp-items="@(new Microsoft.AspNetCore.Mvc.Rendering.SelectList(accounts, "AccountId", "Name"))">
+            <option value="">-- Select Purchase Account --</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="UnitPrice"></label>
+        <input asp-for="UnitPrice" class="form-control" />
+    </div>
+
+    <div class="form-check">
+        <input asp-for="IsActive" class="form-check-input" />
+        <label asp-for="IsActive" class="form-check-label"></label>
+    </div>
+
+    <br />
+    <button type="submit" class="btn btn-primary">Update</button>
+    <a class="btn btn-secondary" asp-action="Index">Cancel</a>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

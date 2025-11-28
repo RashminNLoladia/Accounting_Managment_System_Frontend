@@ -1,0 +1,34 @@
+﻿@model Accounting_Managment_System_Frontend.Models.UserRoleViewModel
+
+@{
+    ViewData["Title"] = "Edit User Role";
+}
+
+<h2>Edit User Role</h2>
+
+<form asp-action="Edit" method="post">
+    <input type="hidden" asp-for="UserRoleId" />
+
+    <div class="form-group mb-3">
+        <label asp-for="UserId" class="control-label"></label>
+        <select asp-for="UserId" class="form-select" asp-items="@(new SelectList(ViewBag.Users, "UserId", "UserName"))"></select>
+        <span asp-validation-for="UserId" class="text-danger"></span>
+    </div>
+
+    <div class="form-group mb-3">
+        <label asp-for="RoleId" class="control-label"></label>
+        <select asp-for="RoleId" class="form-select" asp-items="@(new SelectList(ViewBag.Roles, "RoleId", "Name"))"></select>
+        <span asp-validation-for="RoleId" class="text-danger"></span>
+    </div>
+
+    <div class="form-group mt-4">
+        <button type="submit" class="btn btn-primary">Update</button>
+        <a asp-action="Index" class="btn btn-secondary ms-2">Cancel</a>
+    </div>
+</form>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

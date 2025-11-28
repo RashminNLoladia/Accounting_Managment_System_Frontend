@@ -1,0 +1,39 @@
+﻿@model IEnumerable<Accounting_Managment_System_Frontend.Models.PurchaseInvoiceViewModel>
+@{
+    ViewData["Title"] = "Purchase Invoices";
+}
+
+<h2>Purchase Invoices</h2>
+
+<p>
+    <a class="btn btn-primary" asp-action="Create">Add Invoice</a>
+</p>
+
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>Bill #</th>
+            <th>Date</th>
+            <th>Vendor</th>
+            <th>Total</th>
+            <th>Status</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var b in Model)
+        {
+            <tr>
+                <td>@b.BillNumber</td>
+                <td>@b.BillDate.ToString("yyyy-MM-dd")</td>
+                <td>@b.VendorId</td>
+                <td>@b.Total</td>
+                <td>@b.Status</td>
+                <td>
+                    <a class="btn btn-sm btn-secondary" asp-action="Edit" asp-route-id="@b.BillId">Edit</a>
+                    <a class="btn btn-sm btn-danger" asp-action="Delete" asp-route-id="@b.BillId">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
