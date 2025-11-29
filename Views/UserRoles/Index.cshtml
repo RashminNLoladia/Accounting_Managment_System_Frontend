@@ -22,8 +22,8 @@
         @foreach (var ur in Model)
         {
             <tr>
-                <td>@ur.UserName</td>
-                <td>@ur.RoleName</td>
+                <td>@ur.UserId</td>
+                <td>@ur.RoleId</td>
                 <td>
                     <a asp-action="Edit" asp-route-id="@ur.UserRoleId" class="btn btn-sm btn-warning">Edit</a>
                     <a asp-action="Delete" asp-route-id="@ur.UserRoleId" class="btn btn-sm btn-danger">Delete</a>

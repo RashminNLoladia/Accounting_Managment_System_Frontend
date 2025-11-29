@@ -1,33 +1,55 @@
 ﻿@model List<Accounting_Managment_System_Frontend.Models.SalesInvoiceViewModel>
 
+@{
+    var customers = ViewBag.Customers as IEnumerable<CustomerViewModel>;
+}
+
 <h2>Sales Invoices</h2>
 
 <p>
-    <a class="btn btn-primary" href="/SalesInvoice/Create">Add Invoice</a>
+    <a asp-action="Create" class="btn btn-primary">Create New Invoice</a>
 </p>
 
-<table class="table table-bordered table-striped">
+<table class="table table-striped table-bordered">
     <thead>
         <tr>
+            <th>Invoice #</th>
             <th>Customer</th>
-            <th>Date</th>
-            <th>Total Amount</th>
-            <th>Paid</th>
-            <th></th>
+            <th>Invoice Date</th>
+            <th>SubTotal</th>
+            <th>Total</th>
+            <th>Status</th>
+            <th>Actions</th>
         </tr>
     </thead>
     <tbody>
-        @foreach (var inv in Model)
+        @if (Model != null && Model.Any())
+        {
+            foreach (var invoice in Model)
+            {
+                <tr>
+                    <td>@invoice.InvoiceNumber</td>
+                    <td>
+                        @{
+                            var customer = customers?.FirstOrDefault(c => c.CustomerId == invoice.CustomerId);
+                        }
+                        @customer?.Name ?? "N/A"
+                    </td>
+                    <td>@invoice.InvoiceDate.ToString("yyyy-MM-dd")</td>
+                    <td>@invoice.SubTotal.ToString("F2")</td>
+                    <td>@invoice.Total.ToString("F2")</td>
+                    <td>@invoice.Status</td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@invoice.InvoiceId" class="btn btn-sm btn-warning">Edit</a>
+                        <a asp-action="Delete" asp-route-id="@invoice.InvoiceId" class="btn btn-sm btn-danger">Delete</a>
+                    </td>
+                </tr>
+            }
+        }
+        else
         {
             <tr>
-                <td>@inv.CustomerId</td> <!-- replace with name if API includes CustomerName -->
-                <td>@inv.InvoiceDate.ToString("yyyy-MM-dd")</td>
-                <td>@inv.TotalAmount</td>
-                <td>@(inv.IsPaid ? "Yes" : "No")</td>
-                <td>
-                    <a class="btn btn-sm btn-warning" href="/SalesInvoice/Edit/@inv.Id">Edit</a>
-                    <a class="btn btn-sm btn-danger" href="/SalesInvoice/Delete/@inv.Id">Delete</a>
-                </td>
+                <td colspan="7" class="text-center">No invoices found.</td>
             </tr>
         }
     </tbody>

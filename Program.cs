@@ -14,8 +14,11 @@ namespace Accounting_Managment_System_Frontend
             });
             // Add services to the container.
             builder.Services.AddControllersWithViews();
-            
 
+            builder.Services.AddSession();
+            builder.Services.AddDistributedMemoryCache();
+
+            builder.Services.AddHttpContextAccessor();
 
             var app = builder.Build();
 
@@ -31,6 +34,7 @@ namespace Accounting_Managment_System_Frontend
             app.UseStaticFiles();
 
             app.UseRouting();
+            app.UseSession();
 
             app.UseAuthorization();
 

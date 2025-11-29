@@ -23,7 +23,7 @@ namespace Accounting_Managment_System_Frontend.Models
         [Required]
         [Display(Name = "Password")]
         [DataType(DataType.Password)]
-        public string Password { get; set; } = string.Empty;
+        public string PasswordHash { get; set; } = string.Empty;
 
         [Display(Name = "Is Active")]
         public bool IsActive { get; set; } = true;

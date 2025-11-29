@@ -2,6 +2,7 @@
 using Accounting_Managment_System_Frontend.Services;
 using Accounting_Managment_System_Frontend.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Accounting_Managment_System_Frontend.Controllers
 {
@@ -103,15 +104,27 @@ namespace Accounting_Managment_System_Frontend.Controllers
         // Helper: load dropdowns for Company, Invoice, Bill, BankAccount
         private async Task PopulateDropdowns()
         {
-            var companies = await _api.GetAsync<IEnumerable<CompanyViewModel>>("api/company");
-            var invoices = await _api.GetAsync<IEnumerable<SalesInvoiceViewModel>>("api/salesinvoice");
-            var bills = await _api.GetAsync<IEnumerable<PurchaseInvoiceViewModel>>("api/purchaseinvoice");
-            var banks = await _api.GetAsync<IEnumerable<BankAccountViewModel>>("api/bankaccount");
+            ViewBag.PaymentTypes = new List<SelectListItem>
+{
+    new SelectListItem { Text = "Receipt", Value = "Receipt" },
+    new SelectListItem { Text = "Payment", Value = "Payment" }
+};
 
-            ViewBag.Companies = companies ?? new List<CompanyViewModel>();
-            ViewBag.Invoices = invoices ?? new List<SalesInvoiceViewModel>();
-            ViewBag.Bills = bills ?? new List<PurchaseInvoiceViewModel>();
-            ViewBag.Banks = banks ?? new List<BankAccountViewModel>();
+            var companies = await _api.GetAsync<IEnumerable<CompanyViewModel>>("api/company") ?? new List<CompanyViewModel>();
+            var invoices = await _api.GetAsync<IEnumerable<SalesInvoiceViewModel>>("api/SalesInvoice") ?? new List<SalesInvoiceViewModel>();
+            var bills = await _api.GetAsync<IEnumerable<PurchaseInvoiceViewModel>>("api/purchaseinvoice") ?? new List<PurchaseInvoiceViewModel>();
+            var banks = await _api.GetAsync<IEnumerable<BankAccountViewModel>>("api/bankaccount") ?? new List<BankAccountViewModel>();
+
+            invoices = invoices.Where(i => i != null && !string.IsNullOrEmpty(i.InvoiceNumber)).ToList();
+            bills = bills.Where(b => b != null && !string.IsNullOrEmpty(b.BillNumber)).ToList();
+            banks = banks.Where(b => b != null && !string.IsNullOrEmpty(b.BankName)).ToList();
+
+            ViewBag.Companies = companies;
+            ViewBag.Invoices = invoices;
+            ViewBag.Bills = bills;
+            ViewBag.Banks = banks;
         }
+
+
     }
 }

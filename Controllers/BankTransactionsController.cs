@@ -1,6 +1,10 @@
 ﻿using Accounting_Managment_System_Frontend.Models;
 using Accounting_Managment_System_Frontend.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using System.Linq;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Accounting_Managment_System_Frontend.Controllers
 {
@@ -23,8 +27,8 @@ namespace Accounting_Managment_System_Frontend.Controllers
         // GET: /BankTransactions/Create
         public async Task<IActionResult> Create()
         {
-            await PopulateDropdowns();
-            return View(new BankTransactionViewModel { TransactionDate = DateTime.Today });
+            var model = await BuildBankTransactionViewModelAsync();
+            return View(model);
         }
 
         // POST: /BankTransactions/Create
@@ -34,7 +38,7 @@ namespace Accounting_Managment_System_Frontend.Controllers
         {
             if (!ModelState.IsValid)
             {
-                await PopulateDropdowns();
+                model = await BuildBankTransactionViewModelAsync(model);
                 return View(model);
             }
 
@@ -42,7 +46,7 @@ namespace Accounting_Managment_System_Frontend.Controllers
             if (!ok)
             {
                 ModelState.AddModelError("", "Failed to create bank transaction.");
-                await PopulateDropdowns();
+                model = await BuildBankTransactionViewModelAsync(model);
                 return View(model);
             }
 
@@ -55,7 +59,7 @@ namespace Accounting_Managment_System_Frontend.Controllers
             var model = await _api.GetAsync<BankTransactionViewModel>($"api/banktransaction/{id}");
             if (model == null) return NotFound();
 
-            await PopulateDropdowns();
+            model = await BuildBankTransactionViewModelAsync(model);
             return View(model);
         }
 
@@ -66,7 +70,7 @@ namespace Accounting_Managment_System_Frontend.Controllers
         {
             if (!ModelState.IsValid)
             {
-                await PopulateDropdowns();
+                model = await BuildBankTransactionViewModelAsync(model);
                 return View(model);
             }
 
@@ -74,7 +78,7 @@ namespace Accounting_Managment_System_Frontend.Controllers
             if (!ok)
             {
                 ModelState.AddModelError("", "Failed to update bank transaction.");
-                await PopulateDropdowns();
+                model = await BuildBankTransactionViewModelAsync(model);
                 return View(model);
             }
 
@@ -99,11 +103,25 @@ namespace Accounting_Managment_System_Frontend.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        // Helper: load dropdowns for Bank Accounts
-        private async Task PopulateDropdowns()
+        // Helper: build BankTransactionViewModel with BankAccounts dropdown
+        private async Task<BankTransactionViewModel> BuildBankTransactionViewModelAsync(BankTransactionViewModel existingModel = null)
         {
-            var banks = await _api.GetAsync<IEnumerable<BankAccountViewModel>>("api/bankaccount");
-            ViewBag.BankAccounts = banks ?? new List<BankAccountViewModel>();
+            var banks = await _api.GetAsync<IEnumerable<BankAccountViewModel>>("api/bankaccount")
+                        ?? new List<BankAccountViewModel>();
+
+            var model = existingModel ?? new BankTransactionViewModel
+            {
+                TransactionDate = System.DateTime.Today
+            };
+
+            // Populate the dropdown safely
+            model.BankAccounts = banks.Select(b => new SelectListItem
+            {
+                Value = b.BankAccountId.ToString(),
+                Text = $"{b.BankName} - {b.AccountNumber}" // Adjust fields according to your BankAccountViewModel
+            }).ToList();
+
+            return model;
         }
     }
 }

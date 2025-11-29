@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace Accounting_Managment_System_Frontend.Models
@@ -10,6 +12,8 @@ namespace Accounting_Managment_System_Frontend.Models
         [Required]
         [Display(Name = "Bank Account")]
         public int BankAccountId { get; set; }
+
+        public IEnumerable<SelectListItem> BankAccounts { get; set; } = new List<SelectListItem>();
 
         [Required]
         [Display(Name = "Transaction Date")]

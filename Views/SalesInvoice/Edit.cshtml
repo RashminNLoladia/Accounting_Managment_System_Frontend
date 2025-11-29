@@ -3,18 +3,21 @@
 @{
     ViewData["Title"] = "Edit Sales Invoice";
 
-    var customers = ViewBag.Customers as IEnumerable<Accounting_Managment_System_Frontend.Models.CustomerViewModel> ?? new List<Accounting_Managment_System_Frontend.Models.CustomerViewModel>();
-    var products = ViewBag.Products as IEnumerable<Accounting_Managment_System_Frontend.Models.ProductViewModel> ?? new List<Accounting_Managment_System_Frontend.Models.ProductViewModel>();
+    var customers = ViewBag.Customers as IEnumerable<Accounting_Managment_System_Frontend.Models.CustomerViewModel>
+                    ?? new List<Accounting_Managment_System_Frontend.Models.CustomerViewModel>();
+    var products = ViewBag.Products as IEnumerable<Accounting_Managment_System_Frontend.Models.ProductViewModel>
+                   ?? new List<Accounting_Managment_System_Frontend.Models.ProductViewModel>();
 }
 
 <h2>Edit Sales Invoice</h2>
 
 <form asp-action="Edit" method="post">
-    @Html.HiddenFor(m => m.Id)
+    @Html.HiddenFor(m => m.InvoiceId)
 
     <div class="form-group">
         <label asp-for="CustomerId"></label>
-        <select asp-for="CustomerId" class="form-control" asp-items="@(new Microsoft.AspNetCore.Mvc.Rendering.SelectList(customers, "CustomerId", "Name"))">
+        <select asp-for="CustomerId" class="form-control"
+                asp-items="@(new SelectList(customers, "CustomerId", "Name"))">
             <option value="">-- Select Customer --</option>
         </select>
         <span asp-validation-for="CustomerId" class="text-danger"></span>
@@ -34,7 +37,8 @@
                 <th>Product</th>
                 <th>Quantity</th>
                 <th>Unit Price</th>
-                <th>Total</th>
+                <th>Line Total</th>
+                <th>Action</th>
             </tr>
         </thead>
         <tbody id="invoiceItems">
@@ -46,35 +50,93 @@
                             <option value="">-- Select Product --</option>
                             @foreach (var p in products)
                             {
-                                <option value="@p.ProductId" selected="@(p.ProductId == Model.Items[i].ProductId ? "selected" : null)">
+                                var isSelected = p.ProductId == Model.Items[i].ProductId;
+                                <option value="@p.ProductId" selected="@(isSelected ? "selected" : null)">
                                     @p.Name
                                 </option>
-
                             }
                         </select>
                     </td>
-                    <td><input name="Items[@i].Quantity" type="number" step="0.01" value="@Model.Items[i].Quantity" class="form-control" /></td>
-                    <td><input name="Items[@i].UnitPrice" type="number" step="0.01" value="@Model.Items[i].UnitPrice" class="form-control" /></td>
-                    <td><input name="Items[@i].Total" type="number" step="0.01" value="@Model.Items[i].Total" class="form-control" readonly /></td>
+                    <td>
+                        <input name="Items[@i].Quantity" type="number" step="0.01"
+                               value="@Model.Items[i].Quantity" class="form-control" />
+                    </td>
+                    <td>
+                        <input name="Items[@i].UnitPrice" type="number" step="0.01"
+                               value="@Model.Items[i].UnitPrice" class="form-control" />
+                    </td>
+                    <td>
+                        <input name="Items[@i].LineTotal" type="number" step="0.01"
+                               value="@(Model.Items[i].LineTotal)" class="form-control" readonly />
+                    </td>
+
+                    <!-- hidden fields for backend DTO -->
+                    <input type="hidden" name="Items[@i].InvoiceItemId" value="@Model.Items[i].InvoiceItemId" />
+                    <input type="hidden" name="Items[@i].InvoiceId" value="@Model.InvoiceId" />
+
+                    <input type="hidden" name="Items[@i].Description" value="@Model.Items[i].Description" />
+                    <input type="hidden" name="Items[@i].TaxRateId" value="@Model.Items[i].TaxRateId" />
+
+                    <td>
+                        <button type="button" class="btn btn-danger remove-row">Remove</button>
+                    </td>
                 </tr>
             }
         </tbody>
     </table>
 
-    <button type="submit" class="btn btn-primary">Update</button>
+    <button type="button" class="btn btn-primary" id="addRow">Add Item</button>
+    <br /><br />
+    <button type="submit" class="btn btn-success">Update</button>
     <a class="btn btn-secondary" asp-action="Index">Cancel</a>
 </form>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
     <script>
-        // calculate total dynamically
+        function recalcLineTotal(row) {
+            const qty = parseFloat(row.querySelector('[name*="Quantity"]').value) || 0;
+            const price = parseFloat(row.querySelector('[name*="UnitPrice"]').value) || 0;
+            row.querySelector('[name*="LineTotal"]').value = (qty * price).toFixed(2);
+        }
+
+        // dynamic calculation on input
         document.addEventListener("input", function (e) {
             if (e.target.name.includes("Quantity") || e.target.name.includes("UnitPrice")) {
                 const row = e.target.closest("tr");
-                const qty = parseFloat(row.querySelector('[name*="Quantity"]').value) || 0;
-                const price = parseFloat(row.querySelector('[name*="UnitPrice"]').value) || 0;
-                row.querySelector('[name*="Total"]').value = (qty * price).toFixed(2);
+                recalcLineTotal(row);
+            }
+        });
+
+        let rowIndex = @Model.Items.Count;
+
+        document.getElementById("addRow").addEventListener("click", function () {
+            const table = document.getElementById("invoiceItems");
+            const newRow = table.rows[0].cloneNode(true);
+
+            newRow.querySelectorAll("input, select").forEach(el => {
+                const name = el.name;
+                if (name) {
+                    const newName = name.replace(/\d+/, rowIndex);
+                    el.name = newName;
+                }
+
+                // reset values for new row
+                if (el.type === "number") el.value = 0;
+                if (el.tagName === "SELECT") el.selectedIndex = 0;
+            });
+
+            table.appendChild(newRow);
+            rowIndex++;
+        });
+
+        // remove row
+        document.getElementById("invoiceItems").addEventListener("click", function (e) {
+            if (e.target.classList.contains("remove-row")) {
+                const row = e.target.closest("tr");
+                if (document.getElementById("invoiceItems").rows.length > 1) {
+                    row.remove();
+                }
             }
         });
     </script>

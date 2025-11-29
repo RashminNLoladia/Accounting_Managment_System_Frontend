@@ -1,5 +1,8 @@
-﻿using System.Net.Http;
+﻿using Accounting_Managment_System_Frontend.Models;
+using System.Net.Http;
 using System.Net.Http.Json;
+using System.Text.Json;
+using System.Text;
 
 namespace Accounting_Managment_System_Frontend.Services
 {
@@ -39,5 +42,32 @@ namespace Accounting_Managment_System_Frontend.Services
             var resp = await _http.DeleteAsync(relativeUrl);
             return resp.IsSuccessStatusCode;
         }
+
+        public async Task<LoginResponseViewModel?> LoginAsync(LoginViewModel dto)
+        {
+            var response = await _http.PostAsJsonAsync("auth/login", dto);
+
+            if (!response.IsSuccessStatusCode)
+                return null;
+
+            return await response.Content.ReadFromJsonAsync<LoginResponseViewModel>();
+        }
+
+        public async Task<TResponse?> PostAsync<TRequest, TResponse>(string url, TRequest body)
+        {
+            var json = JsonSerializer.Serialize(body);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+            var response = await _http.PostAsync(url, content);
+            if (!response.IsSuccessStatusCode) return default;
+
+            var result = await response.Content.ReadAsStringAsync();
+            return JsonSerializer.Deserialize<TResponse>(result, new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            });
+        }
+
+
     }
 }

@@ -1,49 +1,138 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Identity
+@using Accounting_Managment_System_Frontend
+
+@inject IHttpContextAccessor HttpContextAccessor
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - Accounting_Managment_System_Frontend</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/Accounting_Managment_System_Frontend.styles.css" asp-append-version="true" />
-</head>
-<body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Accounting_Managment_System_Frontend</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
-    </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
+    <title>@ViewData["Title"] - Accounting System</title>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2025 - Accounting_Managment_System_Frontend - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" />
+
+    <style>
+        body {
+            overflow-x: hidden;
+            background: #f5f5f7;
+        }
+
+        /* /* Sidebar */
+        .sidebar {
+            width: 240px;
+            background: #1e2a40;
+            color: #fff;
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            padding-top: 70px;
+        }
+
+            .sidebar a {
+                color: #d1d5db;
+                padding: 12px 20px;
+                display: block;
+                text-decoration: none;
+                font-size: 15px;
+            }
+
+                .sidebar a:hover {
+                    background: #293754;
+                    color: #fff;
+                }
+
+            .sidebar .menu-title {
+                padding: 10px 20px;
+                text-transform: uppercase;
+                font-size: 12px;
+                color: #9aa0ac;
+                margin-top: 15px;
+            }
+
+        */
+        /* Main Content */
+        .content-wrap {
+            margin-left: 240px;
+            padding: 25px;
+            padding-top: 100px; /* Add extra top padding to clear navbar */
+        }
+
+        .navbar-brand {
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Top Navbar -->
+   @*  <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+        <div class="container-fluid">
+
+            <a class="navbar-brand" href="/Dashboard">Accounting System</a>
+
+            <div class="d-flex align-items-center text-white">
+                <span class="me-3">
+                    @HttpContextAccessor.HttpContext.User.Identity.Name
+                </span>
+
+                <a href="/Account/Logout" class="btn btn-outline-light btn-sm">
+                    Logout
+                </a>
+            </div>
         </div>
-    </footer>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
-    @await RenderSectionAsync("Scripts", required: false)
+    </nav> *@
+
+    @* <!-- Sidebar -->
+    <div class="sidebar">
+
+    <div class="menu-title">Main</div>
+    <a href="/Dashboard"><i class="bi bi-speedometer2 me-2"></i> Dashboard</a>
+
+    <div class="menu-title">Sales</div>
+    <a href="/SalesInvoice/Index"><i class="bi bi-receipt-cutoff me-2"></i> Invoices</a>
+    <a href="/Customers/Index"><i class="bi bi-people me-2"></i> Customers</a>
+
+    <div class="menu-title">Purchase</div>
+    <a href="/PurchaseInvoice/Index"><i class="bi bi-journal-text me-2"></i> Bills</a>
+    <a href="/Vendors/Index"><i class="bi bi-person-lines-fill me-2"></i> Vendors</a>
+
+    <div class="menu-title">Banking</div>
+    <a href="/Payment"><i class="bi bi-cash-coin me-2"></i> Payments</a>
+    <a href="/BankAccount"><i class="bi bi-bank me-2"></i> Bank Accounts</a>
+
+    <div class="menu-title">Ledger</div>
+    <a href="/Journal"><i class="bi bi-book me-2"></i> Journal</a>
+    <a href="/ChartOfAccount"><i class="bi bi-list-ul me-2"></i> Chart of Accounts</a>
+
+    <div class="menu-title">Reports</div>
+    <a href="/Reports/Ledger"><i class="bi bi-collection me-2"></i> Ledger Report</a>
+    <a href="/Reports/TrialBalance"><i class="bi bi-table me-2"></i> Trial Balance</a>
+    <a href="/Reports/PL"><i class="bi bi-graph-up me-2"></i> Profit & Loss</a>
+    <a href="/Reports/BalanceSheet"><i class="bi bi-diagram-3 me-2"></i> Balance Sheet</a>
+
+    <div class="menu-title">Masters</div>
+    <a href="/Product"><i class="bi bi-box-seam me-2"></i> Products</a>
+    <a href="/TaxRate"><i class="bi bi-percent me-2"></i> Tax Rates</a>
+    <a href="/Company"><i class="bi bi-building me-2"></i> Companies</a>
+
+    <div class="menu-title">Settings</div>
+    <a href="/User"><i class="bi bi-person-gear me-2"></i> Users</a>
+    <a href="/Role"><i class="bi bi-shield-lock me-2"></i> Roles</a>
+
+    </div> *@
+
+    <!-- Page Content -->
+    <main class="content-wrap">
+        @RenderBody()
+    </main>
+
+    @RenderSection("Scripts", required: false)
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
+
 </body>
 </html>

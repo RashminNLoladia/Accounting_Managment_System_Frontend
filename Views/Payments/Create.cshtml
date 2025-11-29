@@ -2,16 +2,25 @@
 
 @{
     ViewData["Title"] = "Create Payment";
-    var companies = ViewBag.Companies as IEnumerable<CompanyViewModel> ?? new List<CompanyViewModel>();
-    var invoices = ViewBag.Invoices as IEnumerable<SalesInvoiceViewModel> ?? new List<SalesInvoiceViewModel>();
-    var bills = ViewBag.Bills as IEnumerable<PurchaseInvoiceViewModel> ?? new List<PurchaseInvoiceViewModel>();
-    var banks = ViewBag.Banks as IEnumerable<BankAccountViewModel> ?? new List<BankAccountViewModel>();
+
+    var companies = ViewBag.Companies as IEnumerable<CompanyViewModel> ?? Enumerable.Empty<CompanyViewModel>();
+    
+    var invoices = (ViewBag.Invoices as IEnumerable<SalesInvoiceViewModel>)?.Where(i => !string.IsNullOrEmpty(i.InvoiceNumber)).ToList()
+                 ?? new List<SalesInvoiceViewModel>();
+
+    var invoiceSelectList = new SelectList(invoices, "InvoiceId", "InvoiceNumber");
+
+
+    var bills = ViewBag.Bills as IEnumerable<PurchaseInvoiceViewModel> ?? Enumerable.Empty<PurchaseInvoiceViewModel>();
+    var banks = ViewBag.Banks as IEnumerable<BankAccountViewModel> ?? Enumerable.Empty<BankAccountViewModel>();
+    var paymentTypes = ViewBag.PaymentTypes as IEnumerable<SelectListItem> ?? new List<SelectListItem>();
 }
 
 <h2>Create Payment</h2>
 
 <form asp-action="Create" method="post">
-    <div class="form-group">
+    <!-- Company -->
+    <div class="form-group mb-3">
         <label asp-for="CompanyId"></label>
         <select asp-for="CompanyId" class="form-control" asp-items="@(new SelectList(companies, "CompanyId", "Name"))">
             <option value="">-- Select Company --</option>
@@ -19,64 +28,74 @@
         <span asp-validation-for="CompanyId" class="text-danger"></span>
     </div>
 
-    <div class="form-group">
+    <!-- Payment Number -->
+    <div class="form-group mb-3">
         <label asp-for="PaymentNumber"></label>
         <input asp-for="PaymentNumber" class="form-control" />
         <span asp-validation-for="PaymentNumber" class="text-danger"></span>
     </div>
 
-    <div class="form-group">
+    <!-- Payment Date -->
+    <div class="form-group mb-3">
         <label asp-for="PaymentDate"></label>
         <input asp-for="PaymentDate" type="date" class="form-control" />
         <span asp-validation-for="PaymentDate" class="text-danger"></span>
     </div>
 
-    <div class="form-group">
+    <!-- Payment Type -->
+    <div class="form-group mb-3">
         <label asp-for="PaymentType"></label>
-        <select asp-for="PaymentType" class="form-control">
-            <option value="Receipt">Receipt</option>
-            <option value="Payment">Payment</option>
+        <select asp-for="PaymentType" class="form-control" asp-items="paymentTypes">
+            <option value="">-- Select Type --</option>
         </select>
+        <span asp-validation-for="PaymentType" class="text-danger"></span>
     </div>
 
-    <div class="form-group">
+    <!-- Amount -->
+    <div class="form-group mb-3">
         <label asp-for="Amount"></label>
         <input asp-for="Amount" class="form-control" />
         <span asp-validation-for="Amount" class="text-danger"></span>
     </div>
 
-    <div class="form-group">
-        <label asp-for="RelatedInvoiceId">Invoice</label>
-        <select asp-for="RelatedInvoiceId" class="form-control" asp-items="@(new SelectList(invoices, "Id", "Id"))">
-            <option value="">-- Select Invoice --</option>
+    <!-- Related Invoice -->
+    <div class="form-group mb-3">
+        <label asp-for="RelatedInvoiceId"></label>
+        <select asp-for="RelatedInvoiceId" class="form-control" asp-items="invoiceSelectList">
+            <!-- do NOT add inner <option> -->
         </select>
     </div>
 
-    <div class="form-group">
-        <label asp-for="RelatedBillId">Bill</label>
+   
+
+    <!-- Related Bill -->
+    <div class="form-group mb-3">
+        <label asp-for="RelatedBillId"></label>
         <select asp-for="RelatedBillId" class="form-control" asp-items="@(new SelectList(bills, "BillId", "BillNumber"))">
             <option value="">-- Select Bill --</option>
         </select>
     </div>
 
-    <div class="form-group">
-        <label asp-for="BankAccountId">Bank</label>
-        <select asp-for="BankAccountId" class="form-control" asp-items="@(new SelectList(banks, "BankAccountId", "AccountName"))">
+    <!-- Bank Account -->
+    <div class="form-group mb-3">
+        <label asp-for="BankAccountId"></label>
+        <select asp-for="BankAccountId" class="form-control" asp-items="@(new SelectList(banks, "BankAccountId", "BankName"))">
             <option value="">-- Select Bank --</option>
         </select>
     </div>
 
-    <div class="form-group">
+    <!-- Method -->
+    <div class="form-group mb-3">
         <label asp-for="Method"></label>
         <input asp-for="Method" class="form-control" />
     </div>
 
-    <div class="form-group">
+    <!-- Reference -->
+    <div class="form-group mb-3">
         <label asp-for="Reference"></label>
         <input asp-for="Reference" class="form-control" />
     </div>
 
-    <br />
     <button type="submit" class="btn btn-success">Save</button>
     <a class="btn btn-secondary" asp-action="Index">Cancel</a>
 </form>

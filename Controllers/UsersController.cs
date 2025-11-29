@@ -1,5 +1,6 @@
 ﻿using Accounting_Managment_System_Frontend.Models;
 using Accounting_Managment_System_Frontend.Services;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Accounting_Managment_System_Frontend.Controllers
@@ -13,6 +14,34 @@ namespace Accounting_Managment_System_Frontend.Controllers
             _api = api;
         }
 
+
+        // GET
+        public IActionResult Login()
+        {
+            return View();
+        }
+
+        // POST
+        [HttpPost]
+        public async Task<IActionResult> Login(LoginViewModel model)
+        {
+            if (!ModelState.IsValid)
+                return View(model);
+
+            // Send login request to backend
+            var response = await _api.PostAsync<LoginViewModel, UserViewModel>("api/Auth/login", model);
+
+            if (response == null)
+            {
+                ViewBag.Error = "Invalid username or password!";
+                return View(model);
+            }
+
+            // Save user in session
+            HttpContext.Session.SetInt32("UserId", response.UserId.Value);
+
+            return RedirectToAction("Index", "Home");
+        }
         // GET: /Users
         public async Task<IActionResult> Index()
         {
